@@ -51,6 +51,22 @@ int brainSenor2;
 int brainSenor3;
 int brainSenor4;
 
+int maxValArr[4][2];
+
+int brainLight1 = 3;
+int brainLight2 = 5;
+int brainLight3 = 6;
+int brainLight4 = 9;
+int brainLight5 = 6;
+
+int brainSensorArry [4][3] = 
+  {{brainLight1},
+  {brainLight2},
+  {brainLight3},
+  {brainLight4}};
+
+int brainLights [4][2];
+
 // Excel variables ------------------------------------------------------------
 String incomingExcelString = "";
 
@@ -132,7 +148,20 @@ void loop()
   processIncomingSerial();
 
   // Process and send data to Excel via serial port (Data Streamer)
-  processOutgoingSerial();  
+  processOutgoingSerial();
+  if( maxValArr[3][1] > 100){
+    leds();
+  }
+
+// Print the LED pin number and max value after sorting.     
+//for (int i = 0; i < 4; i++){
+//      for (int j=0; j < 2; j++){
+//       Serial.print( maxValArr[i][j]);
+//       Serial.print( ": ");
+//      }
+//      Serial.println();
+//    }
+
 }
 
 
@@ -140,13 +169,94 @@ void loop()
 void processSensors() 
 {
   // Add sensor processing code here
-  brainSenor1 = analogRead( brainSenorPin1 );
-  brainSenor2 = analogRead( brainSenorPin2 );
-  brainSenor3 = analogRead( brainSenorPin3 );
-  brainSenor4 = analogRead( brainSenorPin4 );
+//  brainSensorArry[0][2] = analogRead( brainSenorPin1 );
+//  brainSensorArry[1][2] = analogRead( brainSenorPin2 );
+//  brainSensorArry[2][2] = analogRead( brainSenorPin3 );
+//  brainSensorArry[3][2] = analogRead( brainSenorPin4 );
+
+  ledPeak(brainSenorPin1, 1);
+  ledPeak(brainSenorPin2, 2);
+  ledPeak(brainSenorPin3, 3);
+  ledPeak(brainSenorPin4, 4);
+
+  sortBrainArray();
+
+//  for (int i = 0; i > 4; i++){
+//      if (brainLights[i][1] > brainLights[i+1][1]){
+//        highestBrain[0] = brainLights[i][0];
+//      } else if (brainLights[i][1] > brainLights[i+2][1]){
+//        highestBrain[1] = brainLights[i][0];
+//      }
+//  }
+
+
+
+
+
+
+//  for (int i = 0; i > 4; i++){
+//    for (int h = 0; h > 3; h++){
+//      if (brainLights[h][1] > brainLights[h+1][1]){
+//        highestBrain[i] = brainLights[h][0];
+//      } 
+//    }
+//  }
 }
 
 // Add any specialized methods and processing code here
+
+void sortBrainArray(){
+    //int size = sizeof(brainSensorArry[0]);
+    int swap [2];
+    for (int i = 0; i < 4; i++){
+      for (int j = 0; j < 2; j++){
+        maxValArr[i][j] = brainSensorArry[i][j];
+        //Serial.println(maxValArr[i][j]);
+      }
+    }
+    for(int i=0; i<4; i++){
+      for(int j=0; j<3; j++){
+        if(maxValArr[j][1] > maxValArr[j+1][1]){
+          swap[0] = maxValArr[j][0];
+          swap[1] = maxValArr[j][1];
+          maxValArr[j][0] = maxValArr[j+1][0];
+          maxValArr[j][1] = maxValArr[j+1][1];
+          maxValArr[j+1][0] = swap[0];
+          maxValArr[j+1][1] = swap[1];
+        }
+      }
+    }
+}
+
+void leds(){
+  analogWrite(maxValArr[0][0], 0);
+  analogWrite(maxValArr[1][0], 63);
+  analogWrite(maxValArr[2][0], 127);
+  analogWrite(maxValArr[3][0], 255);
+}
+void ledConversion()
+{
+//  int led1Val = map(brainSenor1, 0, 1023, 0, 255);
+//  int led2Val = map(brainSenor2, 0, 1023, 0, 255);
+//  int led3Val = map(brainSenor3, 0, 1023, 0, 255);
+//  int led4Val = map(brainSenor4, 0, 1023, 0, 255);
+//  int led5Val = map(brainSenor5, 0, 1023, 0, 255);
+  
+//  analogWrite(brainLight1, led1Val);
+//  analogWrite(brainLight2, led2Val);
+//  analogWrite(brainLight3, led3Val);
+//  analogWrite(brainLight4, led4Val);
+//  analogWrite(brainLight5, led5Val);
+}
+
+void ledPeak(int pin, int sensorNum )
+{
+  sensorNum = sensorNum - 1;
+  brainSensorArry[sensorNum][2] = analogRead( pin );
+  if (brainSensorArry[sensorNum][2] > brainSensorArry[sensorNum][1]){
+    brainSensorArry[sensorNum][1] = brainSensorArry[sensorNum][2];
+  }
+}
 
 // INCOMING SERIAL DATA PROCESSING CODE----------------------------------------
 // Process serial data inputString from Data Streamer
@@ -173,16 +283,16 @@ void sendDataToSerial()
   // Send data out separated by a comma (kDelimiter)
   // Repeat next 2 lines of code for each variable sent:
 
-  Serial.print(brainSenor1);
+  Serial.print(brainSensorArry[0][2]);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSenor2);
+  Serial.print(brainSensorArry[1][2]);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSenor3);
+  Serial.print(brainSensorArry[2][2]);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSenor4);
+  Serial.print(brainSensorArry[3][2]);
   Serial.print(kDelimiter);
 
   Serial.print(yAxis);
