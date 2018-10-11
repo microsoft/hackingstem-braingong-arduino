@@ -1,7 +1,7 @@
 #include <Wire.h>
 
 // ------------------------- LIS3DH ACCEL
-
+// TODO Get rid of Accel code
 // List of registers used by accelerometer
 #define LIS3DH_ADDRESS           0x18
 #define LIS3DH_REG_STATUS1       0x07
@@ -50,6 +50,11 @@ int brainSenor1;
 int brainSenor2;
 int brainSenor3;
 int brainSenor4;
+
+int brainSenor1Tare;
+int brainSenor2Tare;
+int brainSenor3Tare;
+int brainSenor4Tare;
 
 // Excel variables ------------------------------------------------------------
 String incomingExcelString = "";
@@ -102,6 +107,11 @@ void setup() {
   rangeControl |= LIS3DH_RANGE_8_G << 4;                //Change variable to write make sure to also update the scale factor
   writeRegister8 (LIS3DH_REG_CTRL4, rangeControl);
 
+  //Tare all sensors to zero
+  brainSenor1Tare = tare(brainSenorPin1);
+  brainSenor2Tare = tare(brainSenorPin2);
+  brainSenor3Tare = tare(brainSenorPin3);
+  brainSenor4Tare = tare(brainSenorPin4);
 
   // Initializations occur here
   Serial.begin(9600);  
@@ -140,10 +150,15 @@ void loop()
 void processSensors() 
 {
   // Add sensor processing code here
-  brainSenor1 = analogRead( brainSenorPin1 );
-  brainSenor2 = analogRead( brainSenorPin2 );
-  brainSenor3 = analogRead( brainSenorPin3 );
-  brainSenor4 = analogRead( brainSenorPin4 );
+  brainSenor1 = analogRead( brainSenorPin1 ) - brainSenor1Tare;
+  brainSenor2 = analogRead( brainSenorPin2 ) - brainSenor2Tare;
+  brainSenor3 = analogRead( brainSenorPin3 ) - brainSenor3Tare;
+  brainSenor4 = analogRead( brainSenorPin4 ) - brainSenor4Tare;
+
+//  brainSenor1 = map(brainSenor1, 0, 512, 0, 100);
+//  brainSenor2 = map(brainSenor2, 0, 512, 0, 100);
+//  brainSenor3 = map(brainSenor3, 0, 512, 0, 100);
+//  brainSenor4 = map(brainSenor4, 0, 512, 0, 100);
 }
 
 // Add any specialized methods and processing code here
@@ -191,6 +206,11 @@ void sendDataToSerial()
   Serial.println(); // Add final line ending character only once
 }
 
+int tare(int inputPin)
+{
+  int tareValue = analogRead( inputPin );
+  return tareValue;
+}
 //-----------------------------------------------------------------------------
 // DO NOT EDIT ANYTHING BELOW THIS LINE
 //-----------------------------------------------------------------------------
