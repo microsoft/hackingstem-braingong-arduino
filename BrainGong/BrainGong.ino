@@ -1,4 +1,4 @@
-#include <Wire.h>
+#include <Wire.h> //TODO is this an artifact of the accelo?
 
 const int dataRate = 10;      // Change this variable to increase the frequency that data is sent to Excel
 
@@ -59,8 +59,12 @@ void loop()
   // Read Excel variables from serial port (Data Streamer)
   processIncomingSerial();
 
-  // Process and send data to Excel via serial port (Data Streamer)
-  processOutgoingSerial();  
+  if (incomingSerialData[0] != "#pause")
+  {
+    // Process and send data to Excel via serial port (Data Streamer)
+    processOutgoingSerial();  
+  }
+
 }
 
 
