@@ -1,20 +1,18 @@
-# Introduction 
-TODO: Give a short introduction of your project. Let this section explain the objectives or the motivation behind this project. 
+# Introduction
+Arduino code for Machines That Emulate Humans lesson plans adapted for Arduino
 
 # Getting Started
-TODO: Guide users through getting your code up and running on their own system. In this section you can talk about:
-1.	Installation process
-2.	Software dependencies
-3.	Latest releases
-4.	API references
+1. Download lesson assets at http://aka.ms/hackingSTEM
+1. Build your brain sensors!
+1. Use [Arduino IDE](https://www.arduino.cc/en/Main/Software) to the .ino to your [Arduino Uno](https://store.arduino.cc/usa/arduino-uno-rev3) microcontroller
+1. Verify data interactions in Excel
+1. Ready, Set, Science!
 
-# Build and Test
-TODO: Describe and show how to build your code and run the tests. 
+# Contributing
+We gladly accept pull requests for enhancements and bug fixes! You may also submit feature requests and bugs!
+https://github.com/TODO
 
-# Contribute
-TODO: Explain how other users and developers can contribute to make your code better. 
+# Make it your!
+This project is licensed under the MIT open source license, see License.txt. The MIT license allows you to take this project and make awesome things with it! MIT is a very permissive license, but does require you include license and copyright from License.txt in any derivative work for sake of attribution.
 
-If you want to learn more about creating good readme files then refer the following [guidelines](https://www.visualstudio.com/en-us/docs/git/create-a-readme). You can also seek inspiration from the below readme files:
-- [ASP.NET Core](https://github.com/aspnet/Home)
-- [Visual Studio Code](https://github.com/Microsoft/vscode)
-- [Chakra Core](https://github.com/Microsoft/ChakraCore)
+Fork away! Let us know what you build!

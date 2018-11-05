@@ -1,6 +1,33 @@
-#include <Wire.h> //TODO is this an artifact of the accelo?
+//===----------------__ Hacking STEM BrainGong Arduino __------------===//
+// For use with the How Do Impacts Affect The Brain lesson plan 
+// available from Microsoft Education Workshop at 
+// http://aka.ms/hackingSTEM
+//
+// Overview:
+// Project detects analog voltage levels which correspond to 
+// deformation of velostat flex sensors attached to a simulated brain. 
+// These values help us understand impact forces.
+//
+// Pins:
+// A0 Frontal Sensor 
+// A1 Parietal Sensor
+// A2 Left Temporal Sensor
+// A3 Right Temporal Sensor
+// A4 Occipital Sensor
+//
+// This project uses an Arduino UNO microcontroller board, information at:
+// https://www.arduino.cc/en/main/arduinoBoardUno
+//
+// Comments, contributions, suggestions, bug reports, and feature requests
+// are welcome! For source code and bug reports see:
+// http://github.com/[TODO github path to Hacking STEM]
+//
+// Copyright 2018 David Myka Microsoft EDU Workshop - HackingSTEM
+// MIT License terms detailed in LICENSE.txt 
+//===----------------------------------------------------------------------===//
 
-const int dataRate = 10;      // Change this variable to increase the frequency that data is sent to Excel
+// Change this variable to increase the frequency that data is sent to Excel
+const int dataRate = 10;
 
 // Program variables ----------------------------------------------------------
 int brainSensorPin1 = A0;
