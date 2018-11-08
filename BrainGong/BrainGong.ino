@@ -26,35 +26,13 @@
 // MIT License terms detailed in LICENSE.txt 
 //===----------------------------------------------------------------------===//
 
-// Change this variable to increase the frequency that data is sent to Excel
-const int dataRate = 10;
+int frontalSensorPin = A0;
+int parietalSensorPin = A1;
+int leftTemporalSensorPin = A2;
+int rightTemporalSensorPin = A3;
+int OccipitalSensorPin = A4;
 
-// Program variables ----------------------------------------------------------
-int brainSensorPin1 = A0;
-int brainSensorPin2 = A1;
-int brainSensorPin3 = A2;
-int brainSensorPin4 = A3;
-int brainSensorPin5 = A4;
-
-int brainSensor1;
-int brainSensor2;
-int brainSensor3;
-int brainSensor4;
-int brainSensor5;
-
-int brainSensor1Tare;
-int brainSensor2Tare;
-int brainSensor3Tare;
-int brainSensor4Tare;
-int brainSensor5Tare;
-
-
-// Excel variables ------------------------------------------------------------
-String incomingExcelString = "";
-
-// Serial data variables ------------------------------------------------------
 const byte kNumberOfChannelsFromExcel = 6; 
-// IMPORTANT: This must be equal to number of channels set in Data Streamer
 //Incoming Serial Data Array
 String incomingSerialData[kNumberOfChannelsFromExcel];
 
@@ -66,13 +44,6 @@ unsigned long serialPreviousTime; // Timestamp to track serial interval
 
 // SETUP ----------------------------------------------------------------------
 void setup() {
-  //Tare all sensors to zero
-  brainSensor1Tare = tare(brainSensorPin1);
-  brainSensor2Tare = tare(brainSensorPin2);
-  brainSensor3Tare = tare(brainSensorPin3);
-  brainSensor4Tare = tare(brainSensorPin4);
-  brainSensor5Tare = tare(brainSensorPin5);
-
   // Initializations occur here
   Serial.begin(9600);  
 }
@@ -80,38 +51,17 @@ void setup() {
 // START OF MAIN LOOP --------------------------------------------------------- 
 void loop()
 {
-  // Process sensors
-  processSensors();
 
   // Read Excel variables from serial port (Data Streamer)
-  processIncomingSerial();
+  ProcessIncomingSerial();
 
   if (incomingSerialData[0] != "#pause")
   {
     // Process and send data to Excel via serial port (Data Streamer)
-    processOutgoingSerial();  
+    ProcessOutgoingSerial();  
   }
 
 }
-
-
-// SENSOR INPUT CODE-----------------------------------------------------------
-void processSensors() 
-{
-  // Add sensor processing code here
-  brainSensor1 = analogRead( brainSensorPin1 ) - brainSensor1Tare;
-  brainSensor2 = analogRead( brainSensorPin2 ) - brainSensor2Tare;
-  brainSensor3 = analogRead( brainSensorPin3 ) - brainSensor3Tare;
-  brainSensor4 = analogRead( brainSensorPin4 ) - brainSensor4Tare;
-  brainSensor5 = analogRead( brainSensorPin5 ) - brainSensor5Tare;
-
-//  brainSensor1 = map(brainSensor1, 0, 512, 0, 100);
-//  brainSensor2 = map(brainSensor2, 0, 512, 0, 100);
-//  brainSensor3 = map(brainSensor3, 0, 512, 0, 100);
-//  brainSensor4 = map(brainSensor4, 0, 512, 0, 100);
-}
-
-// Add any specialized methods and processing code here
 
 // INCOMING SERIAL DATA PROCESSING CODE----------------------------------------
 // Process serial data inputString from Data Streamer
@@ -119,13 +69,7 @@ void ParseSerialData()
 {
   if (stringComplete) {     
     //Build an array of values from comma delimited string from Data Streamer
-    BuildDataArray(inputString);
-
-    // Set vavariables based on array index referring to columns:
-    // Data Out column A5 = 0, B5 = 1, C5 = 2, etc.
-//    incomingExcelFloat = incomingSerialData[0].toFloat(); // Data Out column A5
-//    incomingExcelInteger = incomingSerialData[1].toInt(); // Data Out column B5
-//    incomingExcelString = incomingSerialData[2]; // Data Out column C5
+    ParseLine(inputString);
 
     inputString = ""; // reset inputString
     stringComplete = false; // reset stringComplete flag
@@ -133,51 +77,47 @@ void ParseSerialData()
 }
 
 // OUTGOING SERIAL DATA PROCESSING CODE----------------------------------------
-void sendDataToSerial()
-{
+void SendDataToSerial() {
+  // Read sensor values
+  int frontSensorReading = analogRead(frontalSensorPin);
+  int parietalSensorReading = analogRead(parietalSensorPin);
+  int leftTemporalSensorReading = analogRead(leftTemporalSensorPin);
+  int rightTemporalSensorReading = analogRead(rightTemporalSensorPin);
+  int occipitalSensorReading = analogRead(OccipitalSensorPin);
+
   // Send data out separated by a comma (kDelimiter)
   // Repeat next 2 lines of code for each variable sent:
-
-  Serial.print(brainSensor1);
+  Serial.print(frontSensorReading);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSensor2);
+  Serial.print(parietalSensorReading);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSensor3);
+  Serial.print(leftTemporalSensorReading);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSensor4);
+  Serial.print(rightTemporalSensorReading);
   Serial.print(kDelimiter);
 
-  Serial.print(brainSensor5);
+  Serial.print(occipitalSensorReading);
   Serial.print(kDelimiter);
 
   Serial.println(); // Add final line ending character only once
 }
 
-int tare(int inputPin)
-{
-  int tareValue = analogRead( inputPin );
-  return tareValue;
-}
-//-----------------------------------------------------------------------------
-// DO NOT EDIT ANYTHING BELOW THIS LINE
-//-----------------------------------------------------------------------------
-
 // OUTGOING SERIAL DATA PROCESSING CODE----------------------------------------
-void processOutgoingSerial()
+void ProcessOutgoingSerial()
 {
    // Enter into this only when serial interval has elapsed
   if((millis() - serialPreviousTime) > kSerialInterval) 
   {
     serialPreviousTime = millis(); // Reset serial interval timestamp
-    sendDataToSerial(); 
+    SendDataToSerial(); 
   }
 }
 
 // INCOMING SERIAL DATA PROCESSING CODE----------------------------------------
-void processIncomingSerial()
+void ProcessIncomingSerial()
 {
   GetSerialData();
   ParseSerialData();
@@ -193,13 +133,6 @@ void GetSerialData()
       stringComplete = true;              // Then we have a complete string
     }
   }
-}
-
-// Takes the comma delimited string from Data Streamer
-// and splits the fields into an indexed array
-void BuildDataArray(String data)
-{
-  return ParseLine(data);
 }
 
 // Parses a single string of comma delimited values with line ending character
