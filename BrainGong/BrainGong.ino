@@ -21,7 +21,7 @@
 //
 // Comments, contributions, suggestions, bug reports, and feature requests
 // are welcome! For source code and bug reports see:
-// http://github.com/[TODO github path to Hacking STEM]
+// https://github.com/microsoft/hackingstem-braingong-arduino
 //
 // Copyright 2018 David Myka Microsoft EDU Workshop - HackingSTEM
 // MIT License terms detailed in LICENSE.txt 
