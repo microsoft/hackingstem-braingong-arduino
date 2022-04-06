@@ -1,7 +1,7 @@
 //===----------------__ Hacking STEM BrainGong Arduino __------------===//
 // For use with the How Do Impacts Affect The Brain lesson plan 
 // available from Microsoft Education Workshop at 
-// https://www.microsoft.com/en-us/education/education-workshop/brain-impact-simulator.aspx
+// https://education.microsoft.com/hackingStem/lesson/ecaf3891
 // http://aka.ms/hackingSTEM
 //
 // Overview:

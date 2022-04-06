@@ -2,7 +2,7 @@
 Microcontroller code for Microsoft Hacking STEM Brain Impact Simulator lesson plan adapted for Arduino.
 
 # Getting Started
-1. Download lesson assets at https://www.microsoft.com/en-us/education/education-workshop/brain-impact-simulator.aspx
+1. Download lesson assets at https://education.microsoft.com/hackingStem/lesson/ecaf3891
 1. Build your brain sensors!
 1. Use [Arduino IDE](https://www.arduino.cc/en/Main/Software) to flash the .ino to your [Arduino Uno](https://store.arduino.cc/usa/arduino-uno-rev3) microcontroller
 1. Verify data interactions in Excel
